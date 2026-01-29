@@ -1,0 +1,13 @@
+/logstash$ sudo apt update
+sudo apt install -y grafana
+sudo systemctl enable grafana-server
+sudo systemctl start grafana-server
+sudo systemctl status grafana-server  # check it's running
+Hit:1 https://artifacts.elastic.co/packages/8.x/apt stable InRelease
+Hit:2 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:3 https://packages.grafana.com/oss/deb stable InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu noble InRelease
+Hit:5 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:6 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Reading package lists... Done
+Building dependency tree... Done
