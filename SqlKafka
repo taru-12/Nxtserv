@@ -1,0 +1,89 @@
+filebeat.modules:
+- module: mysql
+  error:
+    enabled: true
+    var.paths:
+      - "C:/ProgramData/MySQL/MySQL Server 9.5/Data/mysql-new-error.log"
+  slowlog:
+    enabled: true
+    var.paths:
+      - "C:/ProgramData/MySQL/MySQL Server 9.5/Data/mysql-slow.log"
+
+# ============================== Filebeat Inputs ===============================
+# MySQL General Log (NOT supported by module, so custom input)
+filebeat.inputs:
+- type: filestream
+  id: mysql-general
+  enabled: true
+  paths:
+    - "C:/ProgramData/MySQL/MySQL Server 9.5/Data/mysql-general.log"
+  fields:
+    event.dataset: mysql.general
+    log_type: mysql_general
+    log_category: database
+  fields_under_root: true
+
+# ============================== Processors ===================================
+processors:
+  # Parse MySQL General Log
+  - dissect:
+      when:
+        equals:
+          log_type: mysql_general
+      tokenizer: "%{ts} %{thread_id} %{command} %{query}"
+      field: "message"
+      target_prefix: "mysql.general"
+
+  - script:
+      when:
+        equals:
+          log_type: mysql_general
+      lang: javascript
+      source: >
+        function process(event) {
+          var q = event.Get("mysql.general.query");
+          if (q) {
+            if (q.startsWith("SELECT")) event.Put("query_type", "SELECT");
+            else if (q.startsWith("INSERT")) event.Put("query_type", "INSERT");
+            else if (q.startsWith("UPDATE")) event.Put("query_type", "UPDATE");
+            else if (q.startsWith("DELETE")) event.Put("query_type", "DELETE");
+          }
+        }
+
+  - script:
+      when:
+        equals:
+          event.dataset: mysql.error
+      lang: javascript
+      source: >
+        function process(event) {
+          var msg = event.Get("message");
+          if (!msg) return;
+
+          msg = msg.toLowerCase();
+          if (msg.includes("starting")) event.Put("mysql_event_type", "restart");
+          else if (msg.includes("shutdown complete")) event.Put("mysql_event_type", "shutdown");
+          else if (msg.includes("ready for connections")) event.Put("mysql_event_type", "connect");
+          else if (msg.includes("disconnecting")) event.Put("mysql_event_type", "disconnect");
+          else if (msg.includes("aborted connection")) event.Put("mysql_event_type", "aborted");
+        }
+
+  - add_host_metadata: ~
+  - add_cloud_metadata: ~
+
+# ============================== Output: Kafka ===============================
+output.kafka:
+  hosts: ["127.0.0.1:9092"]
+  topic: "mysql-logs"
+  partition.round_robin:
+    reachable_only: true
+  required_acks: 1
+  compression: gzip
+
+# ============================== Logging ======================================
+logging.level: info
+logging.to_files: true
+logging.files:
+  path: "C:/Program Files/filebeat-9.2.2-windows-x86_64/logs"
+  name: filebeat
+  keepfiles: 7
