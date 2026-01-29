@@ -1,0 +1,31 @@
+tarunya@LAPTOP-OFME:~$ curl 'http://localhost:9200/filebeat-logs-2026.01.28/_search?size=5&pretty'
+{
+  "took" : 86,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 1,
+    "successful" : 1,
+    "skipped" : 0,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : {
+      "value" : 10000,
+      "relation" : "gte"
+    },
+    "max_score" : 1.0,
+    "hits" : [
+      {
+        "_index" : "filebeat-logs-2026.01.28",
+        "_id" : "G6CuBZwB6xqFHMnePKy5",
+        "_score" : 1.0,
+        "_ignored" : [
+          "event.original.keyword",
+          "message.keyword"
+        ],
+        "_source" : {
+          "message" : "{\"@timestamp\":\"2026-01-28T03:12:43.994Z\",\"@metadata\":{\"beat\":\"filebeat\",\"type\":\"_doc\",\"version\":\"8.19.9\",\"pipeline\":\"filebeat-8.19.9-system-syslog-entrypoint\"},\"log\":{\"offset\":26447819,\"file\":{\"path\":\"/var/log/syslog\"}},\"fileset\":{\"name\":\"syslog\"},\"message\":\"2026-01-27T14:39:26.652461+00:00 LAPTOP-OFME filebeat[162]: {\\\"log.level\\\":\\\"info\\\",\\\"@timestamp\\\":\\\"2026-01-27T14:39:26.652Z\\\",\\\"log.logger\\\":\\\"kafka\\\",\\\"log.origin\\\":{\\\"function\\\":\\\"github.com/elastic/beats/v7/libbeat/outputs/kafka.kafkaLogger.Log\\\",\\\"file.name\\\":\\\"kafka/log.go\\\",\\\"file.line\\\":57},\\\"message\\\":\\\"client/metadata retrying after 250ms... (1 attempts remaining)\\\\n\\\",\\\"service.name\\\":\\\"filebeat\\\",\\\"ecs.version\\\":\\\"1.6.0\\\"}\",\"input\":{\"type\":\"log\"},\"event\":{\"module\":\"system\",\"dataset\":\"system.syslog\",\"timezone\":\"+00:00\"},\"service\":{\"type\":\"system\"},\"ecs\":{\"version\":\"1.12.0\"},\"agent\":{\"version\":\"8.19.9\",\"ephemeral_id\":\"30518b08-1d55-4c2d-af30-4582c86ef488\",\"id\":\"97090aec-de83-4472-b8af-b0dbfe789581\",\"name\":\"LAPTOP-OFME\",\"type\":\"filebeat\"},\"host\":{\"mac\":[\"00-15-5D-5D-9D-C6\"],\"hostname\":\"LAPTOP-OFME\",\"architecture\":\"x86_64\",\"name\":\"laptop-ofme\",\"os\":{\"version\":\"24.04.3 LTS (Noble Numbat)\",\"family\":\"debian\",\"name\":\"Ubuntu\",\"kernel\":\"6.6.87.2-microsoft-standard-WSL2\",\"codename\":\"noble\",\"type\":\"linux\",\"platform\":\"ubuntu\"},\"id\":\"9c981eaad93a4b398041af78169a4d8b\",\"containerized\":false,\"ip\":[\"172.17.173.166\",\"fe80::215:5dff:fe5d:9dc6\"]}}",
+          "@version" : "1",
+          "event" : {
+            "original" : "{\"@timestamp\":\"2026-01-28T03:12:43.994Z\",\"@metadata\":{\"beat\":\"filebeat\",\"type\":\"_doc\",\"version\":\"8.19.9\",\"pipeline\":\"filebeat-8.19.9-system-syslog-entrypoint\"},\"log\":{\"offset\":26447819,\"file\":{\"path\":\"/var/log/syslog\"}},\"fileset\":{\"name\":\"syslog\"},\"message\":\"2026-01-27T14:39:26.652461+00:00 LAPTOP-OFME filebeat[162]: {\\\"log.level\\\":\\\"info\\\",\\\"@timestamp\\\":\\\"2026-01-27T14:39:26.652Z\\\",\\\"log.logger\\\":\\\"kafka\\\",\\\"log.origin\\\":{\\\"function\\\":\\\"github.com/elastic/beats/v7/libbeat/outputs/kafka.kafkaLogger.Log\\\",\\\"file.name\\\":\\\"kafka/log.go\\\",\\\"file.line\\\":57},\\\"message\\\":\\\"client/metadata retrying after 250ms... (1 attempts remaining)\\\\n\\\",\\\"service.name\\\":\\\"filebeat\\\",\\\"ecs.version\\\":\\\"1.6.0\\\"}\",\"input\":{\"type\":\"log\"},\"event\":{\"module\":\"system\",\"dataset\":\"system.syslog\",\"timezone\":\"+00:00\"},\"service\":{\"type\":\"system\"},\"ecs\":{\"version\":\"1.12.0\"},\"agent\":{\"version\":\"8.19.9\",\"ephemeral_id\":\"30518b08-1d55-4c2d-af30-4582c86ef488\",\"id\":\"97090aec-de83-4472-b8af-b0dbfe789581\",\"name\":\"LAPTOP-OFME\",\"type\":\"filebeat\"},\"host\":{\"mac\":[\"00-15-5D-5D-9D-C6\"],\"hostname\":\"LAPTOP-OFME\",\"architecture\":\"x86_64\",\"name\":\"laptop-ofme\",\"os\":{\"version\":\"24.04.3 LTS (Noble Numbat)\",\"family\":\"debian\",\"name\":\"Ubuntu\",\"kernel\":\"6.6.87.2-microsoft-standard-WSL2\",\"codename\":\"noble\",\"type\":\"linux\",\"platform\":\"ubuntu\"},\"id\":\"9c981eaad93a4b398041af78169a4d8b\",\"containerized\":false,\"ip\":[\"172.17.173.166\",\"fe80::215:5dff:fe5d:9dc6\"]}}"
+          },
