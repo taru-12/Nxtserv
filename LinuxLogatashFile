@@ -1,0 +1,55 @@
+# Start Zookeeper
+bin/zookeeper-server-start.sh config/zookeeper.properties
+# Start Kafka Broker
+bin/kafka-server-start.sh config/server.properties
+# Create Kafka topic
+bin/kafka-topics.sh --create \
+--topic filebeat-logs \
+--bootstrap-server localhost:9092 \
+--partitions 1 \
+--replication-factor 1
+# List topics
+bin/kafka-topics.sh --list --bootstrap-server localhost:9092
+
+
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /var/log/syslog
+      - /var/log/auth.log
+
+output.kafka:
+  hosts: ["localhost:9092"]
+  topic: "filebeat-logs"
+# Start Filebeat
+sudo systemctl start filebeat
+sudo systemctl status filebeat
+
+#logatash
+input {
+  kafka {
+    bootstrap_servers => "localhost:9092"
+    topics => ["filebeat-logs"]
+    group_id => "logstash-group"
+    auto_offset_reset => "latest"
+  }
+}
+
+filter {
+  grok {
+    match => {
+      "message" => "%{SYSLOGTIMESTAMP:timestamp} %{HOSTNAME:host} %{DATA:program}: %{GREEDYDATA:log_message}"
+    }
+  }
+}
+
+output {
+  elasticsearch {
+    hosts => ["http://localhost:9200"]
+    index => "filebeat-logs-%{+YYYY.MM.dd}"
+  }
+  stdout { codec => rubydebug }
+}
+# Start Logstash
+bin/logstash -f kafka-logstash.conf
